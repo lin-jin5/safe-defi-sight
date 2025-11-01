@@ -1,6 +1,4 @@
-Of course. Here is a comprehensive `README.md` file tailored to the "DeFi Risk Analyzer" project, based on the provided file structure and code. This version is more descriptive and useful for developers and users than the original template.
 
-***
 
 # DeFi Sight - Advanced Risk Analyzer
 
