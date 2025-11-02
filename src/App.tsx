@@ -16,6 +16,7 @@ import ContractScanner from "./pages/ContractScanner";
 import Alerts from "./pages/Alerts";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import { ThemeProvider } from "next-themes"; // <-- IMPORT THEME PROVIDER
 
 const queryClient = new QueryClient();
 
@@ -23,31 +24,34 @@ const App = () => (
   <WagmiProvider config={config}>
     <QueryClientProvider client={queryClient}>
       <WalletProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <SidebarProvider>
-              <div className="flex min-h-screen w-full">
-                <AppSidebar />
-                <div className="flex-1 flex flex-col">
-                  <Header />
-                  <main className="flex-1">
-                    <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/positions" element={<Positions />} />
-                      <Route path="/token-analyzer" element={<TokenAnalyzer />} />
-                      <Route path="/contract-scanner" element={<ContractScanner />} />
-                      <Route path="/alerts" element={<Alerts />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </main>
+        {/* WRAP WITH THEME PROVIDER */}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <SidebarProvider>
+                <div className="flex min-h-screen w-full">
+                  <AppSidebar />
+                  <div className="flex-1 flex flex-col">
+                    <Header />
+                    <main className="flex-1">
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/positions" element={<Positions />} />
+                        <Route path="/token-analyzer" element={<TokenAnalyzer />} />
+                        <Route path="/contract-scanner" element={<ContractScanner />} />
+                        <Route path="/alerts" element={<Alerts />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </main>
+                  </div>
                 </div>
-              </div>
-            </SidebarProvider>
-          </BrowserRouter>
-        </TooltipProvider>
+              </SidebarProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </ThemeProvider>
       </WalletProvider>
     </QueryClientProvider>
   </WagmiProvider>
