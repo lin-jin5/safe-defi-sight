@@ -1,36 +1,32 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, AlertTriangle, CheckCircle, PieChart, XCircle } from "lucide-react";
-import { useBlockchainData, TokenAnalysisResult } from "@/hooks/useBlockchainData";
+import { analyzeToken, TokenAnalysisResult } from "@/hooks/useBlockchainData";
 import { toast } from "sonner";
 
 export default function TokenAnalyzer() {
   const [address, setAddress] = useState("");
-  const [analyzing, setAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<TokenAnalysisResult | null>(null);
-  const { analyzeToken } = useBlockchainData();
 
-  const handleAnalyze = async () => {
+  const { mutate, data: analysisResult, isPending: analyzing } = useMutation({
+    mutationFn: analyzeToken, // The async function to call
+    onSuccess: () => {
+      toast.success("Token analysis complete");
+    },
+    onError: (err) => {
+      toast.error(err.message || "Failed to analyze token. Please try again.");
+    }
+  });
+
+  const handleAnalyze = () => {
     if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
       toast.error("Please enter a valid Ethereum address");
       return;
     }
-
-    setAnalyzing(true);
-    setAnalysisResult(null);
-
-    try {
-      const result = await analyzeToken(address);
-      setAnalysisResult(result);
-      toast.success("Token analysis complete");
-    } catch (error) {
-      toast.error("Failed to analyze token. Please try again.");
-    } finally {
-      setAnalyzing(false);
-    }
+    mutate(address);
   };
   
   const getRiskBadge = (score: number) => {
@@ -108,7 +104,6 @@ export default function TokenAnalyzer() {
               </div>
             </CardContent>
           </Card>
-
           <Card className="shadow-card bg-gradient-card border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -129,7 +124,6 @@ export default function TokenAnalyzer() {
               )}
             </CardContent>
           </Card>
-
           <Card className="shadow-card bg-gradient-card border-border">
             <CardHeader>
               <CardTitle>Holder Analysis</CardTitle>
@@ -147,7 +141,6 @@ export default function TokenAnalyzer() {
               )}
             </CardContent>
           </Card>
-
           <Card className="shadow-card bg-gradient-card border-border">
             <CardHeader>
               <CardTitle>Contract Code Checks</CardTitle>
