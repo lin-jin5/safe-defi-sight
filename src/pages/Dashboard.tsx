@@ -5,13 +5,13 @@ import { VulnerableContractsCard } from "@/components/dashboard/VulnerableContra
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
-import { useBlockchainData } from "@/hooks/useBlockchainData";
+import { usePositions } from "@/hooks/useBlockchainData";
 import { Wallet, AlertCircle } from "lucide-react";
 import { useAppKit } from "@reown/appkit/react";
 
 export default function Dashboard() {
   const { isConnected } = useWallet();
-  const { loading, error } = useBlockchainData();
+  const { isLoading, isError, error } = usePositions();
   const { open } = useAppKit();
 
   if (!isConnected) {
@@ -47,28 +47,28 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {error && (
+      {isError && (
         <Card className="border-danger/50 bg-danger/10">
           <CardContent className="flex items-center gap-3 py-4">
             <AlertCircle className="h-5 w-5 text-danger" />
-            <p className="text-sm text-danger">{error}</p>
+            <p className="text-sm text-danger">{error.message}</p>
           </CardContent>
         </Card>
       )}
 
-      {loading && (
+      {isLoading ? (
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
           <p className="mt-4 text-muted-foreground">Loading your positions...</p>
         </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RiskScoreCard />
+          <LiquidationWatchCard />
+          <HighRiskTokensCard />
+          <VulnerableContractsCard />
+        </div>
       )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RiskScoreCard />
-        <LiquidationWatchCard />
-        <HighRiskTokensCard />
-        <VulnerableContractsCard />
-      </div>
     </div>
   );
 }
