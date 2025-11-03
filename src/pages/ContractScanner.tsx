@@ -1,36 +1,32 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileCode, Shield, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
-import { useBlockchainData, ContractScanResult } from "@/hooks/useBlockchainData";
+import { scanContract, ContractScanResult } from "@/hooks/useBlockchainData";
 import { toast } from "sonner";
 
 export default function ContractScanner() {
   const [address, setAddress] = useState("");
-  const [scanning, setScanning] = useState(false);
-  const [scanResult, setScanResult] = useState<ContractScanResult | null>(null);
-  const { scanContract } = useBlockchainData();
 
-  const handleScan = async () => {
+  const { mutate, data: scanResult, isPending: scanning } = useMutation({
+    mutationFn: scanContract,
+    onSuccess: () => {
+      toast.success("Contract scan complete");
+    },
+    onError: (err) => {
+      toast.error(err.message || "Failed to scan contract. Please try again.");
+    }
+  });
+
+  const handleScan = () => {
     if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
       toast.error("Please enter a valid contract address");
       return;
     }
-
-    setScanning(true);
-    setScanResult(null);
-
-    try {
-      const result = await scanContract(address);
-      setScanResult(result);
-      toast.success("Contract scan complete");
-    } catch (error) {
-      toast.error("Failed to scan contract. Please try again.");
-    } finally {
-      setScanning(false);
-    }
+    mutate(address);
   };
   
   const getSeverityBadge = (level: 'Critical' | 'Medium' | 'Low') => {
@@ -90,7 +86,7 @@ export default function ContractScanner() {
             </CardHeader>
             <CardContent className="space-y-3">
                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
-                <span className="text-sm">Source Code Verified on Etherscan</span>
+                <span className="text-sm">Source Code Verified</span>
                 {scanResult.isVerified ? (
                     <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-success" /><span className="font-bold text-success">Yes</span></div>
                 ) : (
@@ -98,7 +94,7 @@ export default function ContractScanner() {
                 )}
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-secondary">
-                <span className="text-sm">Known Exploits Reported</span>
+                <span className="text-sm">Known Exploits</span>
                  {scanResult.knownExploits ? (
                     <div className="flex items-center gap-2"><XCircle className="h-4 w-4 text-danger" /><span className="font-bold text-danger">Yes</span></div>
                 ) : (
