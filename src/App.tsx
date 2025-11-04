@@ -18,13 +18,23 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "next-themes";
 import { MobileFooter } from "@/components/layout/MobileFooter"; // <-- 1. IMPORT THE NEW COMPONENT
+import { sdk as miniAppSdk } from '@farcaster/miniapp-sdk';
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
+function FarcasterProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    miniAppSdk.actions.ready();
+  }, []);
 
+  return <>{children}</>;
+}
 const App = () => (
   <WagmiProvider config={config}>
     <QueryClientProvider client={queryClient}>
+       <FarcasterProvider>
       <WalletProvider>
+        
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <Toaster />
@@ -54,7 +64,9 @@ const App = () => (
             </BrowserRouter>
           </TooltipProvider>
         </ThemeProvider>
+        
       </WalletProvider>
+      </FarcasterProvider>
     </QueryClientProvider>
   </WagmiProvider>
 );
