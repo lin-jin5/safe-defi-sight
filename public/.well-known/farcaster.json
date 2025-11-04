@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjMyMDI2NCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDFGMkE1MkYwZjlDZDYwZGY4RDAwNTdjNGE1YTEwRUFlNjQyNjNCNDgifQ",
+    "payload": "eyJkb21haW4iOiJkZWktcy5uZXRsaWZ5LmFwcCJ9",
+    "signature": "DrKanRa5LeJOkE3EWRPe9tM7/F1ZQX39DolvhjmCfw9qfBjz7wBCvi4Y/ikenOPkmMAuIuPN52+OKO/XvFcR4Rw="
+  },
+  "frame": {
+    "version": "1",
+    "name": "Example Frame",
+    "iconUrl": "https://dei-s.netlify.app/icon.png",
+    "homeUrl": "https://dei-s.netlify.app",
+    "imageUrl": "https://dei-s.netlify.app/image.png",
+    "buttonTitle": "Check this out",
+    "splashImageUrl": "https://dei-s.netlify.app/splash.png",
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://dei-s.netlify.app/api/webhook"
+  }
+}
