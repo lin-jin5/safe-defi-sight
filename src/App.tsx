@@ -16,7 +16,8 @@ import ContractScanner from "./pages/ContractScanner";
 import Alerts from "./pages/Alerts";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import { ThemeProvider } from "next-themes"; // <-- IMPORT THEME PROVIDER
+import { ThemeProvider } from "next-themes";
+import { MobileFooter } from "@/components/layout/MobileFooter"; // <-- 1. IMPORT THE NEW COMPONENT
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,6 @@ const App = () => (
   <WagmiProvider config={config}>
     <QueryClientProvider client={queryClient}>
       <WalletProvider>
-        {/* WRAP WITH THEME PROVIDER */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <Toaster />
@@ -35,7 +35,8 @@ const App = () => (
                   <AppSidebar />
                   <div className="flex-1 flex flex-col">
                     <Header />
-                    <main className="flex-1">
+                    {/* 2. ADD PADDING TO THE BOTTOM OF THE MAIN CONTENT */}
+                    <main className="flex-1 pb-20 md:pb-0"> 
                       <Routes>
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/positions" element={<Positions />} />
@@ -48,6 +49,7 @@ const App = () => (
                     </main>
                   </div>
                 </div>
+                <MobileFooter /> {/* <-- 3. RENDER THE FOOTER */}
               </SidebarProvider>
             </BrowserRouter>
           </TooltipProvider>
