@@ -60,7 +60,6 @@ Make sure you have Node.js and npm installed on your machine.
     ```sh
     npm run dev
     ```  
-
 ## Application Pages
 
 -   **/ (Dashboard)**: The main overview page showing the portfolio risk score, liquidation watch, high-risk tokens, and vulnerable contracts.
