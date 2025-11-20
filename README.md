@@ -1,5 +1,3 @@
-
-
 # DeFi Sight - Advanced Risk Analyzer
 
 DeFi Sight is a comprehensive risk analysis dashboard designed to empower decentralized finance (DeFi) users. It provides real-time insights into your portfolio, helping you identify and mitigate risks such as potential liquidations, rug pulls, and smart contract vulnerabilities. By connecting your wallet, you get a holistic view of your positions across different protocols, enabling you to make informed decisions and protect your digital assets.
