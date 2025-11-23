@@ -39,7 +39,6 @@ Make sure you have Node.js and npm installed on your machine.
     git clone <YOUR_GIT_URL>
     cd akin-tunde-safe-defi-sight
     ```
-
 2.  **Install NPM packages:**
     ```sh
     npm install
