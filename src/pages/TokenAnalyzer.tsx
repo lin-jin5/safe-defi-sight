@@ -1,3 +1,4 @@
+// FILE: src/pages/TokenAnalyzer.tsx
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,9 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Search, AlertTriangle, CheckCircle, PieChart, XCircle } from "lucide-react";
 import { analyzeToken, TokenAnalysisResult } from "@/hooks/useBlockchainData";
 import { toast } from "sonner";
+import { useAnalysisInput } from "@/hooks/useAnalysisInput"; // <-- NEW IMPORT
 
 export default function TokenAnalyzer() {
-  const [address, setAddress] = useState("");
 
   const { mutate, data: analysisResult, isPending: analyzing } = useMutation({
     mutationFn: analyzeToken, // The async function to call
@@ -21,13 +22,12 @@ export default function TokenAnalyzer() {
     }
   });
 
-  const handleAnalyze = () => {
-    if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
-      toast.error("Please enter a valid Ethereum address");
-      return;
-    }
-    mutate(address);
-  };
+  // Use the new centralized hook
+  const { address, setAddress, handleAnalyze, isDisabled } = useAnalysisInput(
+    mutate,
+    analyzing,
+    'token'
+  );
   
   const getRiskBadge = (score: number) => {
     if (score > 75) return <Badge className="bg-success/20 text-success border-success/50">Low Risk</Badge>;
@@ -58,7 +58,7 @@ export default function TokenAnalyzer() {
             />
             <Button
               onClick={handleAnalyze}
-              disabled={!address || analyzing}
+              disabled={isDisabled}
               className="bg-primary hover:bg-primary/90"
             >
               <Search className="h-4 w-4 mr-2" />
